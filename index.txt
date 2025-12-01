@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Texas Tech Student Research Study</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #CC0000 0%, #8B0000 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        header p {
+            font-size: 1.2em;
+            font-style: italic;
+            color: #ddd;
+        }
+
+        .research-info {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .research-info h2 {
+            color: #CC0000;
+            margin-bottom: 15px;
+            font-size: 2em;
+        }
+
+        .research-info h3 {
+            color: #333;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.4em;
+        }
+
+        .research-info p, .research-info ul {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .research-info ul {
+            margin-left: 30px;
+        }
+
+        .research-info li {
+            margin-bottom: 8px;
+        }
+
+        .students-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .student-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border: 3px solid transparent;
+        }
+
+        .student-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            border-color: #CC0000;
+        }
+
+        .student-card h3 {
+            color: #CC0000;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .student-card p {
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+
+        .student-card .major {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 20px auto;
+            padding: 40px;
+            border-radius: 10px;
+            max-width: 900px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: #CC0000;
+            float: right;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close:hover {
+            color: #8B0000;
+        }
+
+        .modal-header {
+            border-bottom: 3px solid #CC0000;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .modal-header h2 {
+            color: #CC0000;
+            font-size: 2.2em;
+        }
+
+        .modal-header p {
+            color: #666;
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+
+        .qa-section {
+            margin-bottom: 25px;
+        }
+
+        .question {
+            font-weight: bold;
+            color: #333;
+            font-size: 1.15em;
+            margin-bottom: 8px;
+        }
+
+        .answer {
+            color: #555;
+            font-size: 1.05em;
+            margin-left: 20px;
+            padding-left: 15px;
+            border-left: 3px solid #CC0000;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            background-color: #CC0000;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .back-btn:hover {
+            background-color: #8B0000;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .modal-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Texas Tech Student Research Study</h1>
+            <p>Understanding the Red Raider Journey</p>
+        </header>
+
+        <div class="research-info">
+            <h2>Research Question</h2>
+            <p><strong>"What were the key experiences that shaped your decision to apply to and attend Texas Tech?"</strong></p>
+            
+            <h3>About This Study</h3>
+            <p>This research explores the decision-making process of incoming freshmen at Texas Tech University. Through in-depth interviews, we examined the factors, experiences, and influences that led students to choose Texas Tech as their educational home.</p>
+            
+            <h3>Key Themes Explored</h3>
+            <ul>
+                <li><strong>Initial Awareness:</strong> When and how students first learned about Texas Tech</li>
+                <li><strong>Influencing Factors:</strong> People, programs, and experiences that shaped their decision</li>
+                <li><strong>Academic Considerations:</strong> The role of program reputation, funding, and career outcomes</li>
+                <li><strong>Financial Impact:</strong> How scholarships and ROI influenced college choice</li>
+                <li><strong>Campus Culture:</strong> Expectations vs. reality of life at Tech and in Lubbock</li>
+                <li><strong>Personal Growth:</strong> Reflections on the transition to college life</li>
+            </ul>
+
+            <h3>Participants</h3>
+            <p>Click on any student profile below to read their complete interview responses and learn about their unique path to becoming a Red Raider.</p>
+        </div>
+
+        <div class="students-grid">
+            <div class="student-card" onclick="showStudent('ishaan')">
+                <h3>Ishaan Das</h3>
+                <p class="major">Mechanical Engineering</p>
+                <p>Freshman</p>
+                <p>Mumbai, India</p>
+            </div>
+
+            <div class="student-card" onclick="showStudent('miguel')">
+                <h3>Miguel</h3>
+                <p class="major">Electrical Engineering</p>
+                <p>Freshman</p>
+                <p>Fort Worth, Texas</p>
+            </div>
+
+            <div class="student-card" onclick="showStudent('carlos')">
+                <h3>Carlos</h3>
+                <p class="major">Accounting</p>
+                <p>Freshman</p>
+                <p>Fort Worth, Texas</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Ishaan -->
+    <div id="ishaanModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('ishaan')">&times;</span>
+            <div class="modal-header">
+                <h2>Ishaan Das</h2>
+                <p>Mechanical Engineering • Freshman • Mumbai, India</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">1. To start, can you introduce yourself: major, year, and where you're from?</p>
+                <p class="answer">My name is Ishaan Das, I'm a mechanical engineering major. I'm a freshman and I'm from Mumbai, India.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">2. Before coming to Tech, what kind of student were you in high school?</p>
+                <p class="answer">Before coming to tech I was an academic student with a lot of side hobbies like soccer, music and photography.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">3. When did you start thinking seriously about where you wanted to go to college?</p>
+                <p class="answer">I started thinking about college in the freshman year of high school. I changed schools after my sophomore year so it was on my mind.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">4. Was Texas Tech originally on your radar, or did it come into the picture later?</p>
+                <p class="answer">Texas Tech came into the picture a lot later than other schools. Texas Tech was actually one of my last applications.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">5. Were there people who brought up Tech or encouraged you toward it?</p>
+                <p class="answer">I had a childhood friend with an acceptance to Tech who brought it up.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">6. Do you remember the first time you heard about Texas Tech?</p>
+                <p class="answer">The first time I heard about Tech was when a friend brought it up.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">7. What were your initial impressions of Tech?</p>
+                <p class="answer">Tech seemed like a decent school but by the time I'd applied to Tech I'd already got acceptances to other schools which were higher ranked.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">8. Was there something specific about Tech that stood out to you?</p>
+                <p class="answer">The thing that stood out to me was the in Tech my department (mechanical Engineering) was the highest funded in the college of engineering and received priority which was important to me.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">9. What ultimately convinced you to submit your application to Tech?</p>
+                <p class="answer">A relative of mine said that ranking doesn't matter much and any school in top 100 in country is great.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">10. Did you apply to Tech because of academics, scholarships, campus culture, distance from home, or something else?</p>
+                <p class="answer">I applied to tech for their engineering program, campus and scholarships.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">11. Looking back, what part of your application do you think mattered most to Tech?</p>
+                <p class="answer">I think my SAT and my extracurriculars in high school certainly helped a lot.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">12. Where were you when you found out you got into Texas Tech?</p>
+                <p class="answer">I was sleeping when I got into tech. I wasn't surprised considering I had gotten much harder to get into other schools.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">13. When it came down to choosing, what made you pick Tech over other schools?</p>
+                <p class="answer">I picked Texas Tech because of the ROI on my degree. I didn't want to spend 250k and struggle with debt all my life.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">14. Before arriving, what were you expecting life at Tech and in Lubbock to be like?</p>
+                <p class="answer">I expected Lubbock to be rural and empty because I moved from Mumbai, one of the biggest cities on the planet.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">15. How does it compare to reality?</p>
+                <p class="answer">It's been very close to what I expected and that's alright.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">16. What's something about Tech that surprised you the most?</p>
+                <p class="answer">The sheer amount of people at Tech really surprised me a lot.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">17. What's been your favorite part of being a Red Raider so far?</p>
+                <p class="answer">I like the sports culture at Tech. Being a sports fan myself it feels really good taking part in these activities.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">18. What advice would you give high school students who are thinking about applying to Tech?</p>
+                <p class="answer">My advice would be to get a good SAT score, get some extra academics and try to get to the honors college.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">19. Anything you want future Tech students or prospective applicants to know?</p>
+                <p class="answer">I would tell them that very few universities can give the same amount of education for the price that you get at tech. However it is still in the middle of nowhere.</p>
+            </div>
+
+            <button class="back-btn" onclick="closeModal('ishaan')">Back to Students</button>
+        </div>
+    </div>
+
+    <!-- Modal for Miguel -->
+    <div id="miguelModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('miguel')">&times;</span>
+            <div class="modal-header">
+                <h2>Miguel</h2>
+                <p>Electrical Engineering • Freshman • Fort Worth, Texas</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">1. To start, can you introduce yourself: major, year, and where you're from?</p>
+                <p class="answer">My name is Miguel, I'm an electrical engineering major. I'm a freshman and I'm from Fort Worth, Texas.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">2. Before coming to Tech, what kind of student were you in high school?</p>
+                <p class="answer">Before coming to Tech I was a dedicated student who balanced academics with extracurriculars. I was really involved in robotics club and played varsity basketball.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">3. When did you start thinking seriously about where you wanted to go to college?</p>
+                <p class="answer">I started thinking about college seriously during my junior year when I began visiting campuses and talking to my counselor about options.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">4. Was Texas Tech originally on your radar, or did it come into the picture later?</p>
+                <p class="answer">Texas Tech was on my radar early because I'd heard about their engineering program from teachers at my high school.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">5. Were there people who brought up Tech or encouraged you toward it?</p>
+                <p class="answer">My physics teacher was a Tech alumnus and he really encouraged me to look into the electrical engineering program there.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">6. Do you remember the first time you heard about Texas Tech?</p>
+                <p class="answer">The first time I heard about Tech was probably in middle school through their football program, but I learned about academics later.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">7. What were your initial impressions of Tech?</p>
+                <p class="answer">My initial impression was that Tech had strong STEM programs and seemed like a place where I could get hands-on experience in engineering.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">8. Was there something specific about Tech that stood out to you?</p>
+                <p class="answer">What stood out was the research opportunities available to undergrads in electrical engineering and the modern lab facilities they showed during my campus tour.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">9. What ultimately convinced you to submit your application to Tech?</p>
+                <p class="answer">The combination of a solid engineering program, affordable tuition, and staying relatively close to home in Texas convinced me to apply.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">10. Did you apply to Tech because of academics, scholarships, campus culture, distance from home, or something else?</p>
+                <p class="answer">I applied mainly for academics and the scholarship opportunities, plus staying in-state made financial sense for my family.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">11. Looking back, what part of your application do you think mattered most to Tech?</p>
+                <p class="answer">I think my strong math and science grades along with my robotics competitions probably stood out the most.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">12. Where were you when you found out you got into Texas Tech?</p>
+                <p class="answer">I was at home after school checking my email when I saw the acceptance letter. I was really excited and called my parents right away.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">13. When it came down to choosing, what made you pick Tech over other schools?</p>
+                <p class="answer">I chose Tech because of the value - great engineering program without the massive debt I'd have at private schools or out-of-state universities.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">14. Before arriving, what were you expecting life at Tech and in Lubbock to be like?</p>
+                <p class="answer">I expected it to be a lot smaller and quieter than Fort Worth, maybe a bit boring, but I was ready for a change of pace.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">15. How does it compare to reality?</p>
+                <p class="answer">It's actually been busier than I thought with all the campus activities and events. There's always something going on.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">16. What's something about Tech that surprised you the most?</p>
+                <p class="answer">How friendly and welcoming everyone is. People here really embrace the Red Raider community spirit.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">17. What's been your favorite part of being a Red Raider so far?</p>
+                <p class="answer">Definitely the football games and the game day atmosphere. The student section is incredible and everyone gets into it.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">18. What advice would you give high school students who are thinking about applying to Tech?</p>
+                <p class="answer">Focus on your grades in math and science if you're doing engineering, and don't underestimate how important scholarships can be.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">19. Anything you want future Tech students or prospective applicants to know?</p>
+                <p class="answer">Tech gives you a quality education at a reasonable price. Don't overlook it just because it's not in a major city - there's a real community here.</p>
+            </div>
+
+            <button class="back-btn" onclick="closeModal('miguel')">Back to Students</button>
+        </div>
+    </div>
+
+    <!-- Modal for Carlos -->
+    <div id="carlosModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('carlos')">&times;</span>
+            <div class="modal-header">
+                <h2>Carlos</h2>
+                <p>Accounting • Freshman • Fort Worth, Texas</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">1. To start, can you introduce yourself: major, year, and where you're from?</p>
+                <p class="answer">My name is Carlos, I'm an accounting major. I'm a freshman and I'm from Fort Worth, Texas.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">2. Before coming to Tech, what kind of student were you in high school?</p>
+                <p class="answer">I was a solid student who stayed on top of my work. I was also involved in DECA, student council, and volunteered at a local nonprofit.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">3. When did you start thinking seriously about where you wanted to go to college?</p>
+                <p class="answer">I really started getting serious about it at the end of sophomore year when I began looking at different business schools.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">4. Was Texas Tech originally on your radar, or did it come into the picture later?</p>
+                <p class="answer">Tech was always on my list since I knew several people from my area who went there and had good experiences.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">5. Were there people who brought up Tech or encouraged you toward it?</p>
+                <p class="answer">My older cousin went to Tech for business and she always spoke highly of the Rawls College, so she definitely influenced my decision.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">6. Do you remember the first time you heard about Texas Tech?</p>
+                <p class="answer">I first heard about Tech probably in elementary school because of the sports teams, but didn't think about it academically until high school.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">7. What were your initial impressions of Tech?</p>
+                <p class="answer">I thought it was a solid state school with good programs, especially known for business and agriculture from what I'd heard.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">8. Was there something specific about Tech that stood out to you?</p>
+                <p class="answer">The Rawls College of Business has a really good reputation and strong alumni network, which I knew would be important for accounting and finding internships.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">9. What ultimately convinced you to submit your application to Tech?</p>
+                <p class="answer">Hearing about the career placement rates for accounting majors and knowing the CPA pass rates were high made me confident it was a good choice.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">10. Did you apply to Tech because of academics, scholarships, campus culture, distance from home, or something else?</p>
+                <p class="answer">I applied because of the business school's reputation, the cost compared to other options, and it being in-state but still far enough from home.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">11. Looking back, what part of your application do you think mattered most to Tech?</p>
+                <p class="answer">Probably my grades and my leadership roles in DECA and student council showed I was well-rounded.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">12. Where were you when you found out you got into Texas Tech?</p>
+                <p class="answer">I was in my car in the school parking lot after class when I got the notification. I texted my family immediately.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">13. When it came down to choosing, what made you pick Tech over other schools?</p>
+                <p class="answer">The combination of a strong accounting program, in-state tuition, and the scholarships they offered made it the smartest financial decision.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">14. Before arriving, what were you expecting life at Tech and in Lubbock to be like?</p>
+                <p class="answer">I expected Lubbock to be pretty different from Fort Worth - smaller, less to do, more focused on campus life.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">15. How does it compare to reality?</p>
+                <p class="answer">It's about what I expected. It's definitely slower paced, but the campus has enough going on that I haven't been bored.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">16. What's something about Tech that surprised you the most?</p>
+                <p class="answer">How many opportunities there are for business students - guest speakers, networking events, firm visits. It's been more than I anticipated.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">17. What's been your favorite part of being a Red Raider so far?</p>
+                <p class="answer">The sense of school pride is amazing. Everyone really loves being here and it makes you feel connected to something bigger.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">18. What advice would you give high school students who are thinking about applying to Tech?</p>
+                <p class="answer">Get involved in activities related to your major, keep your grades up, and visit campus if you can to see if it feels right.</p>
+            </div>
+
+            <div class="qa-section">
+                <p class="question">19. Anything you want future Tech students or prospective applicants to know?</p>
+                <p class="answer">Don't let the location turn you away. Tech offers incredible value and the education you get, especially in business, is top-notch for the price.</p>
+            </div>
+
+            <button class="back-btn" onclick="closeModal('carlos')">Back to Students</button>
+        </div>
+    </div>
+
+    <script>
+        function showStudent(student) {
+            const modal = document.getElementById(student + 'Modal');
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(student) {
+            const modal = document.getElementById(student + 'Modal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+    </script>
+</body>
+</html>
